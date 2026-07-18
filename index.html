@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <title>P2P Orders</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="phone" aria-label="Прототип мобильного приложения P2P">
+    <section class="screen orders-screen" id="ordersScreen">
+      <header class="app-header">
+        <div class="status-bar" aria-label="Статус устройства">
+          <time id="statusTime">13:00</time>
+          <div class="status-icons">
+            <svg viewBox="0 0 24 18" aria-hidden="true"><rect x="1" y="12" width="4" height="5" rx="1"/><rect x="7" y="8" width="4" height="9" rx="1"/><rect x="13" y="4" width="4" height="13" rx="1"/><rect x="19" width="4" height="17" rx="1" opacity=".28"/></svg>
+            <svg viewBox="0 0 24 18" aria-hidden="true"><path d="M2 6.5C7.9 1.4 16.1 1.4 22 6.5l-2.6 2.8a11.4 11.4 0 0 0-14.8 0L2 6.5Zm5.1 5.4a7.4 7.4 0 0 1 9.8 0L12 17l-4.9-5.1Z"/></svg>
+            <span class="battery"><span></span><b>71</b></span>
+          </div>
+        </div>
+        <div class="title-row">
+          <button class="icon-button back-button" aria-label="Назад">
+            <svg viewBox="0 0 24 24"><path d="m15 4-8 8 8 8M7 12h12"/></svg>
+          </button>
+          <h1>Ордера</h1>
+          <div class="header-actions">
+            <button class="icon-button" id="shareButton" aria-label="Поделиться">
+              <svg viewBox="0 0 24 24"><path d="M12 16V3m0 0L8 7m4-4 4 4M6 10H4v10h16V10h-2"/></svg>
+            </button>
+            <button class="icon-button add-trigger" id="openSheet" aria-label="Добавить ордер">
+              <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+            <button class="icon-button muted" id="filterButton" aria-label="Фильтр">
+              <svg viewBox="0 0 24 24"><path d="M4 5h16l-6.3 7.2V20l-3.4-1.8v-6L4 5Z"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="primary-tabs" role="tablist">
+          <button role="tab" data-mode="active">Активные</button>
+          <button class="selected" role="tab" data-mode="history">Завершено</button>
+        </div>
+      </header>
+
+      <nav class="status-tabs" aria-label="Фильтр статуса">
+        <button data-status="all">Все</button>
+        <button data-status="Завершенно">Завершено</button>
+        <button class="selected" data-status="Отменено">Отменено</button>
+      </nav>
+
+      <div class="orders-list" id="ordersList" aria-live="polite"></div>
+      <div class="empty-state" id="emptyState" hidden>
+        <span class="empty-icon">⌁</span>
+        <strong>Ордеров пока нет</strong>
+        <p>Выберите другой фильтр или добавьте новый ордер.</p>
+      </div>
+
+      <nav class="bottom-nav" aria-label="Основная навигация">
+        <button>
+          <svg viewBox="0 0 24 24"><path d="M4 9.5 12 4l8 5.5V20H4V9.5Z"/><path d="M9 17h6"/></svg><span>P2P</span>
+        </button>
+        <button class="active">
+          <svg viewBox="0 0 24 24"><path d="M5 4h14v16H5zM8 8h2m3 0h3M8 12h2m3 0h3M8 16h2m3 0h3"/></svg><span>Orders</span>
+        </button>
+        <button>
+          <svg viewBox="0 0 24 24"><path d="M4 18V6h16v12H4Z"/><path d="m7 14 3-3 2 2 5-5"/></svg><span>Ads</span>
+        </button>
+        <button>
+          <svg viewBox="0 0 24 24"><path d="M4 5h16v13H8l-4 3V5Z"/><path d="M8 10h.01M12 10h.01M16 10h.01"/></svg><span>Profile</span>
+        </button>
+      </nav>
+    </section>
+
+    <section class="screen detail-screen" id="detailScreen" aria-hidden="true"></section>
+    <section class="screen chat-screen" id="chatScreen" aria-hidden="true"></section>
+
+    <div class="backdrop" id="backdrop"></div>
+    <aside class="order-sheet" id="orderSheet" aria-hidden="true" aria-labelledby="sheetTitle">
+      <div class="sheet-handle"></div>
+      <div class="sheet-heading">
+        <div><span>НОВЫЙ P2P</span><h2 id="sheetTitle">Добавить новый ордер</h2></div>
+        <button class="sheet-close" id="closeSheet" aria-label="Закрыть">×</button>
+      </div>
+      <form id="orderForm">
+        <div class="field-grid">
+          <label>Тип сделки<select name="type"><option>Покупка</option><option>Продажа</option></select></label>
+          <label>Криптовалюта<select name="crypto"><option>USDT</option><option>BTC</option><option>ETH</option></select></label>
+        </div>
+        <label>Сумма в рублях<div class="input-affix"><input name="fiat" type="number" min="1" step="0.01" placeholder="0,00" required><span>RUB</span></div></label>
+        <label>Цена<div class="input-affix"><input name="rate" type="number" min="0.01" step="0.01" placeholder="0,00" required><span>RUB</span></div></label>
+        <label>Имя продавца / покупателя<input name="user" type="text" placeholder="Например, Tarik-BTC" maxlength="24" required></label>
+        <div class="field-grid">
+          <label>Дата и время<input name="date" type="datetime-local" required></label>
+          <label>Статус<select name="status"><option>Завершенно</option><option>Отменено</option></select></label>
+        </div>
+        <button class="submit-order" type="submit">Добавить ордер</button>
+      </form>
+    </aside>
+    <div class="toast" id="toast" role="status"></div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
