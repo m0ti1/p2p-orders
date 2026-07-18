@@ -1,7 +1,8 @@
 const icons = {
   back: '<svg viewBox="0 0 24 24"><path d="m15 4-8 8 8 8M7 12h12"/></svg>',
   copy: '<svg viewBox="0 0 24 24"><rect x="8" y="4" width="11" height="13" rx="2"/><path d="M16 17v2a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h1"/></svg>',
-  chat: '<svg viewBox="0 0 24 24"><path d="M4 5h16v13H8l-4 3V5Z"/><path d="M8 10h.01M12 10h.01M16 10h.01"/></svg>'
+  chat: '<svg viewBox="0 0 24 24"><path d="M4 5h16v13H8l-4 3V5Z"/><path d="M8 10h.01M12 10h.01M16 10h.01"/></svg>',
+  trash: '<svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3m3 0-1 13H7L6 7m4 4v5m4-5v5"/></svg>'
 };
 
 const initialOrders = [
@@ -13,7 +14,26 @@ const initialOrders = [
   { id: '2070110456789362022', type: 'Покупка', crypto: 'ETH', fiat: 45000, rate: 281250, user: 'NATASHA', date: '2026-06-18T10:15:00', status: 'Активен', unread: 3 }
 ];
 
-let orders = [...initialOrders];
+const storageKey = 'p2p-orders-data';
+
+function loadOrders() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(storageKey));
+    return Array.isArray(saved) ? saved : [...initialOrders];
+  } catch {
+    return [...initialOrders];
+  }
+}
+
+function saveOrders() {
+  try {
+    localStorage.setItem(storageKey, JSON.stringify(orders));
+  } catch {
+    // The prototype still works for the current session when storage is unavailable.
+  }
+}
+
+let orders = loadOrders();
 let currentMode = 'history';
 let currentStatus = 'Отменено';
 let selectedOrder = null;
@@ -28,6 +48,7 @@ const emptyState = $('#emptyState');
 const sheet = $('#orderSheet');
 const backdrop = $('#backdrop');
 const orderForm = $('#orderForm');
+const manageOrdersList = $('#manageOrdersList');
 
 function formatFiat(number) {
   return new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(number);
@@ -75,6 +96,26 @@ function renderOrders() {
   });
   ordersList.innerHTML = visible.map(cardTemplate).join('');
   emptyState.hidden = visible.length > 0;
+  renderOrderManager();
+}
+
+function manageOrderTemplate(order) {
+  const safeUser = escapeHtml(order.user);
+  return `
+    <article class="manage-order">
+      <div class="manage-order-info">
+        <div class="manage-order-title ${order.type === 'Покупка' ? 'buy' : 'sell'}">${order.type} <b>${order.crypto}</b></div>
+        <p>${safeUser} · ${formatFiat(order.fiat)} RUB · ${formatDate(order.date)}</p>
+      </div>
+      <button class="delete-order" type="button" data-delete-id="${order.id}" aria-label="Удалить ордер ${order.id}">${icons.trash}</button>
+    </article>`;
+}
+
+function renderOrderManager() {
+  $('#manageOrdersCount').textContent = `${orders.length} шт.`;
+  manageOrdersList.innerHTML = orders.length
+    ? orders.map(manageOrderTemplate).join('')
+    : '<p class="manage-empty">Список пуст. Добавьте новый ордер выше.</p>';
 }
 
 function setMode(mode) {
@@ -99,6 +140,8 @@ function toggleSheet(open) {
   sheet.classList.toggle('open', open);
   backdrop.classList.toggle('visible', open);
   sheet.setAttribute('aria-hidden', String(!open));
+  $('#shareButton').setAttribute('aria-expanded', String(open));
+  if (open) renderOrderManager();
   if (open) setTimeout(() => orderForm.elements.type.focus(), 350);
 }
 
@@ -208,9 +251,26 @@ $('.status-tabs').addEventListener('click', event => {
   if (button) setStatus(button.dataset.status);
 });
 
-$('#openSheet').addEventListener('click', () => toggleSheet(true));
+$('#shareButton').addEventListener('click', () => toggleSheet(true));
 $('#closeSheet').addEventListener('click', () => toggleSheet(false));
 backdrop.addEventListener('click', () => toggleSheet(false));
+
+manageOrdersList.addEventListener('click', event => {
+  const button = event.target.closest('[data-delete-id]');
+  if (!button) return;
+  const id = button.dataset.deleteId;
+  const deletedOrder = orders.find(order => order.id === id);
+  if (!deletedOrder) return;
+  orders = orders.filter(order => order.id !== id);
+  saveOrders();
+  renderOrders();
+  if (selectedOrder?.id === id) {
+    selectedOrder = null;
+    closeScreen($('#chatScreen'));
+    closeScreen($('#detailScreen'));
+  }
+  showToast(`Ордер ${deletedOrder.crypto} удалён`);
+});
 
 orderForm.addEventListener('submit', event => {
   event.preventDefault();
@@ -228,6 +288,7 @@ orderForm.addEventListener('submit', event => {
     unread: 0
   };
   orders.unshift(newOrder);
+  saveOrders();
   currentMode = 'history';
   currentStatus = newOrder.status;
   $$('.primary-tabs button').forEach(button => button.classList.toggle('selected', button.dataset.mode === 'history'));
@@ -260,11 +321,6 @@ $('#chatScreen').addEventListener('submit', event => {
   $('#messages .own-message:last-child .bubble').textContent = message;
   input.value = '';
   $('#chatScroll').scrollTo({ top: $('#chatScroll').scrollHeight, behavior: 'smooth' });
-});
-
-$('#shareButton').addEventListener('click', async () => {
-  if (navigator.share) await navigator.share({ title: 'P2P Orders', text: 'Мои P2P-ордера' }).catch(() => {});
-  else showToast('Ссылка готова к отправке');
 });
 
 $('#filterButton').addEventListener('click', () => {

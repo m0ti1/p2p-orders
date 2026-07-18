@@ -17,11 +17,8 @@
           </button>
           <h1>Ордера</h1>
           <div class="header-actions">
-            <button class="icon-button" id="shareButton" aria-label="Поделиться">
+            <button class="icon-button" id="shareButton" aria-label="Управление ордерами" aria-controls="orderSheet" aria-expanded="false">
               <svg viewBox="0 0 24 24"><path d="M12 16V3m0 0L8 7m4-4 4 4M6 10H4v10h16V10h-2"/></svg>
-            </button>
-            <button class="icon-button add-trigger" id="openSheet" aria-label="Добавить ордер">
-              <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
             </button>
             <button class="icon-button muted" id="filterButton" aria-label="Фильтр">
               <svg viewBox="0 0 24 24"><path d="M4 5h16l-6.3 7.2V20l-3.4-1.8v-6L4 5Z"/></svg>
@@ -87,6 +84,16 @@
         </div>
         <button class="submit-order" type="submit">Добавить ордер</button>
       </form>
+      <section class="manage-orders" aria-labelledby="manageOrdersTitle">
+        <div class="manage-heading">
+          <div>
+            <span>УПРАВЛЕНИЕ</span>
+            <h3 id="manageOrdersTitle">Список ордеров</h3>
+          </div>
+          <strong id="manageOrdersCount"></strong>
+        </div>
+        <div class="manage-list" id="manageOrdersList"></div>
+      </section>
     </aside>
     <div class="toast" id="toast" role="status"></div>
   </main>
