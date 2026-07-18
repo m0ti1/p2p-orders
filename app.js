@@ -2,7 +2,8 @@ const icons = {
   back: '<svg viewBox="0 0 24 24"><path d="m15 4-8 8 8 8M7 12h12"/></svg>',
   copy: '<svg viewBox="0 0 24 24"><rect x="8" y="4" width="11" height="13" rx="2"/><path d="M16 17v2a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h1"/></svg>',
   chat: '<svg viewBox="0 0 24 24"><path d="M4 5h16v13H8l-4 3V5Z"/><path d="M8 10h.01M12 10h.01M16 10h.01"/></svg>',
-  trash: '<svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3m3 0-1 13H7L6 7m4 4v5m4-5v5"/></svg>'
+  trash: '<svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3m3 0-1 13H7L6 7m4 4v5m4-5v5"/></svg>',
+  thumbsUp: '<svg viewBox="0 0 24 24"><path d="M7 10v10H4V10h3Zm0 9c2.2 1 4.1 1.5 5.8 1.5h4.1a2 2 0 0 0 1.9-1.5l1.1-5.1a2 2 0 0 0-2-2.4h-4.1l.6-3.4c.2-1.3-.4-2.6-1.5-3.3L12 4l-1.4 3.5A7.6 7.6 0 0 1 7 11"/></svg>'
 };
 
 const initialOrders = [
@@ -173,7 +174,7 @@ function detailTemplate(order) {
         <div class="data-row"><span class="label">Время ордера</span><span class="value">${formatDate(order.date)}</span></div>
       </div>
       <div class="payment"><span>Способ оплаты</span><strong>Bank Transfer</strong></div>
-      <div class="rating"><h2>Мой рейтинг</h2><div class="rating-chip"><i>♧</i> Хорошо</div></div>
+      <div class="rating"><h2>Мой рейтинг</h2><div class="rating-chip"><i aria-hidden="true">${icons.thumbsUp}</i> Хорошо</div></div>
     </div>`;
 }
 

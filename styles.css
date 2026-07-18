@@ -138,7 +138,8 @@ body { display: grid; place-items: center; overflow: hidden; }
 .rating { margin: 44px 16px 0; }
 .rating h2 { font-size: 20px; }
 .rating-chip { width: 210px; height: 50px; display: flex; align-items: center; justify-content: center; gap: 14px; border-radius: 28px; background: #00ca78; font-size: 18px; }
-.rating-chip i { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; background: #fff; color: #00b76c; font-style: normal; }
+.rating-chip i { width: 40px; height: 40px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 50%; background: #fff; color: #00b76c; font-style: normal; }
+.rating-chip i svg { width: 25px; height: 25px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
 
 .chat-screen { display: flex; flex-direction: column; overflow: hidden; }
 .chat-user { text-align: center; }
