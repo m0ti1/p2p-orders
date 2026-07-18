@@ -68,6 +68,11 @@ function formatDate(value) {
   return `${parts.year}-${parts.month}-${parts.day} ${parts.hour}:${parts.minute}:${parts.second}`;
 }
 
+function addRandomSeconds(value) {
+  const seconds = String(Math.floor(Math.random() * 60)).padStart(2, '0');
+  return `${String(value).slice(0, 16)}:${seconds}`;
+}
+
 function cardTemplate(order) {
   const cryptoAmount = order.fiat / order.rate;
   const isDone = order.status === 'Завершенно';
@@ -284,7 +289,7 @@ orderForm.addEventListener('submit', event => {
     fiat: Number(data.get('fiat')),
     rate: Number(data.get('rate')),
     user: data.get('user').trim(),
-    date: data.get('date'),
+    date: addRandomSeconds(data.get('date')),
     status: data.get('status'),
     unread: 0
   };
