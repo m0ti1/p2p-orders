@@ -114,7 +114,6 @@ function detailTemplate(order) {
   const cryptoAmount = order.fiat / order.rate;
   return `
     <header class="sub-header">
-      <div class="status-bar"><time>${$('#statusTime').textContent}</time><div class="status-icons"></div></div>
       <div class="sub-title-row"><button class="icon-button detail-back" aria-label="Назад">${icons.back}</button><h1>Справочный центр P2P</h1></div>
     </header>
     <div class="detail-content">
@@ -153,7 +152,6 @@ function chatTemplate(order) {
   const safeUser = escapeHtml(order.user);
   return `
     <header class="sub-header">
-      <div class="status-bar"><time>${$('#statusTime').textContent}</time><div></div></div>
       <div class="sub-title-row">
         <button class="icon-button chat-back" aria-label="Назад">${icons.back}</button>
         <div class="chat-user"><h1>${safeUser}</h1><span>ПРОДАВЕЦ · В СЕТИ</span></div><div class="chat-actions">☆ ···</div>
@@ -281,11 +279,5 @@ document.addEventListener('keydown', event => {
   else if ($('#detailScreen').classList.contains('visible')) closeScreen($('#detailScreen'));
 });
 
-function updateClock() {
-  $('#statusTime').textContent = new Intl.DateTimeFormat('ru-RU', { hour: '2-digit', minute: '2-digit' }).format(new Date());
-}
-
 setDefaultDate();
-updateClock();
-setInterval(updateClock, 30000);
 renderOrders();

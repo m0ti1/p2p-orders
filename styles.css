@@ -30,14 +30,7 @@ body { display: grid; place-items: center; overflow: hidden; }
 }
 .screen { position: absolute; inset: 0; background: var(--bg); }
 .orders-screen { z-index: 1; display: flex; flex-direction: column; }
-.app-header { flex: 0 0 auto; border-bottom: 1px solid #33343a; background: #000; }
-.status-bar { height: 48px; padding: 14px 25px 0; display: flex; align-items: flex-start; justify-content: space-between; font-size: 15px; font-weight: 750; letter-spacing: -.3px; }
-.status-icons { display: flex; align-items: center; gap: 7px; height: 18px; }
-.status-icons > svg { width: 22px; height: 17px; fill: #f4f4f5; }
-.battery { position: relative; display: grid; place-items: center; width: 31px; height: 14px; border: 1.5px solid #777; border-radius: 4px; font-size: 9px; }
-.battery::after { content: ""; position: absolute; right: -3px; width: 2px; height: 6px; border-radius: 0 2px 2px 0; background: #777; }
-.battery span { position: absolute; inset: 1.5px; width: 70%; border-radius: 2px; background: #e7e7e9; }
-.battery b { z-index: 1; color: #111; font-weight: 800; }
+.app-header { flex: 0 0 auto; padding-top: env(safe-area-inset-top); border-bottom: 1px solid #33343a; background: #000; }
 .title-row { position: relative; height: 55px; display: flex; align-items: center; justify-content: center; padding: 0 15px; }
 .title-row h1 { margin: 0; font-size: 20px; font-weight: 760; letter-spacing: -.35px; }
 .icon-button { width: 35px; height: 38px; padding: 7px; border: 0; background: transparent; display: grid; place-items: center; cursor: pointer; }
@@ -110,7 +103,7 @@ body { display: grid; place-items: center; overflow: hidden; }
 
 .detail-screen, .chat-screen { z-index: 5; transform: translateX(105%); transition: transform .34s cubic-bezier(.25,.8,.25,1); overflow-y: auto; }
 .detail-screen.visible, .chat-screen.visible { transform: translateX(0); }
-.sub-header { position: sticky; z-index: 2; top: 0; background: rgba(0,0,0,.96); }
+.sub-header { position: sticky; z-index: 2; top: 0; padding-top: env(safe-area-inset-top); background: rgba(0,0,0,.96); }
 .sub-title-row { height: 57px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #24252a; }
 .sub-title-row h1 { margin: 0; font-size: 19px; }
 .sub-title-row .icon-button { position: absolute; left: 10px; }
@@ -171,7 +164,6 @@ body { display: grid; place-items: center; overflow: hidden; }
   .order-sheet { border-radius: 24px 24px 27px 27px; }
 }
 @media (max-height: 720px) {
-  .status-bar { height: 38px; padding-top: 8px; }
   .title-row { height: 49px; }
   .primary-tabs { height: 40px; }
   .primary-tabs button { height: 40px; padding-bottom: 8px; }
